@@ -1,13 +1,10 @@
 package search
 
-fun main() {
- println("Enter the number of people: ")
-    val numberOfPeople = readln().toInt()
-    println("Enter all people:")
-    val people = mutableListOf<String>()
-    for (i in 1..numberOfPeople) {
-      people.add(readLine()?:"nobody")
-    }
+import java.io.File
+
+fun main(args: Array<String>) {
+    val path = args[1]
+    val people = File(path).readLines()
 
     while (true) {
         println("=== Menu ===\n" +
