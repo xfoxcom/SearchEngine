@@ -5,6 +5,13 @@ import java.io.File
 fun main(args: Array<String>) {
     val path = args[1]
     val people = File(path).readLines()
+    val inverted = mutableMapOf<String, MutableList<Int>>()
+    for (i in people.indices) {
+       val list = people[i].split("\\s+".toRegex())
+        for (s in list) {
+            if(inverted.containsKey(s.lowercase())) inverted[s.lowercase()]?.add(i) else inverted.put(s.lowercase(), mutableListOf(i))
+        }
+    }
 
     while (true) {
         println("=== Menu ===\n" +
@@ -17,12 +24,16 @@ fun main(args: Array<String>) {
                 break
             }
             1 -> {
-                println("Enter a name or email to search all suitable people.")
+                println("Enter a name or email to search all matching people.")
                 val data = readln()
                 val found = mutableListOf<String>()
-                for (person in people) {
-                    if (person.contains(data, true)) found.add(person)
+                val list = inverted[data.lowercase()]
+
+                if (list != null) {
+                    for (i in list)
+                        found.add(people[i])
                 }
+
                 if (found.isEmpty()) println("No matching people found.") else {
                     println("People found: ")
                     found.forEach { p -> println(p) }
